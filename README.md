@@ -52,7 +52,7 @@ Future versions of this example may demonstrate how to authenticate with OAuth a
 ## Build and Run UcwaSfboConsole
 
 * Open the cloned code from this repository in Visual Studio
-* Update Program.cs with your Client ID and Tenant name
+* Update Program.cs in the UcwaSfboConsole folder with your Client ID and Tenant name
 * Optionally, you can hard code the username (i.e. username@your-domain.onmicrosoft.com) and password you want to use
 * Build and run the app: UcwaSfboConsole
 
