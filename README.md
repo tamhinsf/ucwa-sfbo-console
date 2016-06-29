@@ -45,6 +45,7 @@ Future versions of this example may demonstrate how to authenticate with OAuth a
   * While still logged into manage.windowsazure.com, Select Active Directory -> Name of the directory where you created your app.
   * Select Applications.  Click View Endpoints at the bottom of the page.
   * Your Tenant ID is the alphanumeric value separated by dashes, immediate after the hostname.  Make sure you copy the entire value: it's between the "/" characters.
+ 
   ![](https://acom.azurecomcdn.net/80C57D/cdn/mediahandler/docarticles/dpsmedia-prod/azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/20160525050127/save-tenant.png)
     
   
