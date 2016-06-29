@@ -45,7 +45,7 @@ Future versions of this example may demonstrate how to authenticate with OAuth a
   * While still logged into manage.windowsazure.com, Select Active Directory -> Name of the directory where you created your app.
   * Select Applications.  Click View Endpoints at the bottom of the page.
   * Your Tenant ID is the alphanumeric value separated by dashes, immediate after the hostname.  Make sure you copy the entire value: it's between the "/" characters.
-    ![](https://acom.azurecomcdn.net/80C57D/cdn/mediahandler/docarticles/dpsmedia-prod/azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/20160525050127/save-tenant.png)
+  ![](https://acom.azurecomcdn.net/80C57D/cdn/mediahandler/docarticles/dpsmedia-prod/azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/20160525050127/save-tenant.png)
     
   
 ## Build and Run UcwaSfboConsole
@@ -55,11 +55,11 @@ Future versions of this example may demonstrate how to authenticate with OAuth a
 * Optionally, you can hard code the username (i.e. username@your-domain.onmicrosoft.com) and password you want to use
 * Build and run the app: UcwaSfboConsole
 
- ## Using UcwaSfboConsole
+## Using UcwaSfboConsole
  
- You'll be presented with a number of options.  Begin with "login" and enter the credentials of the user you identified earlier.  You'll see the output of the UCWA Autodiscovery flow.
+You'll be presented with a number of options.  Begin with "login" and enter the credentials of the user you identified earlier.  You'll see the output of the UCWA Autodiscovery flow.
  
- After you login, you can type "meeting" to see the flow related to creating, listing, and deleting a meeting using UCWA's MyOnlineMeeting resource.  "Presence" will first make a call to UCWA's MakeMeAvailable resource and, if necessary, Presence to set your presence to one of the displayed values.
+After you login, you can type "meeting" to see the flow related to creating, listing, and deleting a meeting using UCWA's MyOnlineMeeting resource.  "Presence" will first make a call to UCWA's MakeMeAvailable resource and, if necessary, Presence to set your presence to one of the displayed values.
 
 ## Questions and comments
 
