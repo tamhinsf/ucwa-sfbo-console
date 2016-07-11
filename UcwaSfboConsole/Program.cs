@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using UcwaSfboConsole.UcwaSfbo;
 using System.Linq;
+using System.Globalization;
 
 namespace UcwaSfboConsole
 {
@@ -13,7 +14,7 @@ namespace UcwaSfboConsole
         // replace tenant with the name of your Azure AD instance
         // this is usually in the form of your-tenant.onmicrosoft.com
 
-        private static string tenant = "";
+        private static string tenant = "MOD839792.onmicrosoft.com";
 
         // replace clientID with the clientID of the SFBO native app you created
         // in your Azure AD instance.  
@@ -23,13 +24,25 @@ namespace UcwaSfboConsole
         // Initiate conversations and join meetings
         // Read/write Skype user information (preview)
 
-        private static string clientId = "";
+        private static string clientId = "513366ab-12c6-4f85-8e4a-b3bdeccdecbb";
 
         // sfboResourceAppId is a constant you don't have to change
 
         private static string sfboResourceAppId = "00000004-0000-0ff1-ce00-000000000000";
 
         private static string aadInstance = "https://login.microsoftonline.com/{0}";
+
+        // replace redirectUri with the redirect URI of the native app you created
+        // in your Azure AD instance.  you will only need this if you choose to login
+        // using the dialog option 
+
+        private static string redirectUri = "https://demo-sfbo-ucwa";
+
+        // authenticationContext is initialized with the values of your
+        // aadInstance and tenant
+
+        private static AuthenticationContext authenticationContext = 
+            new AuthenticationContext(String.Format(CultureInfo.InvariantCulture, aadInstance, tenant));
 
         // feeling lazy?  hard code your username and password in the variables below 
         // if values are present, the "login" command will automatically use them and not
@@ -71,6 +84,7 @@ namespace UcwaSfboConsole
         // UCWA app resources
 
         private static AuthenticationResult ucwaAuthenticationResult = null;
+
        
         #endregion
 
@@ -86,6 +100,7 @@ namespace UcwaSfboConsole
             Console.WriteLine("**************************************************");
             Console.WriteLine(" tentant is " + tenant);
             Console.WriteLine(" clientId is " + clientId);
+            Console.WriteLine(" redirectUri is " + redirectUri);
             Console.WriteLine("**************************************************");
 
             if (tenant == "" && clientId == "")
@@ -103,13 +118,16 @@ namespace UcwaSfboConsole
             while (!commandString.Equals("Exit", StringComparison.InvariantCultureIgnoreCase))
             {
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("Enter command (login | meeting | presence | help | exit ) >");
+                Console.WriteLine("Enter command (login | contact | meeting | presence | help | exit ) >");
                 commandString = Console.ReadLine();
 
                 switch (commandString.ToUpper())
                 {
                     case "LOGIN":
                         Login();
+                        break;
+                    case "CONTACT":
+                        Contact();
                         break;
                     case "MEETING":
                         Meeting();
@@ -131,6 +149,8 @@ namespace UcwaSfboConsole
             }
         }
 
+
+
         #region Textual UX
 
         // Gather user credentials form the command line 
@@ -142,9 +162,15 @@ namespace UcwaSfboConsole
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Please enter username and password to sign in.");
+                Console.WriteLine("We'll append @" + tenant + " to the username if you don't provide a domain");
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("User>");
                 string user = Console.ReadLine();
+                if (!user.Contains("@"))
+                {
+                    user += "@" + tenant;
+                    Console.WriteLine("We'll try to login as " + user);
+                }
                 Console.WriteLine("Password>");
                 string password = ReadPasswordFromConsole();
                 Console.WriteLine("");
@@ -187,6 +213,7 @@ namespace UcwaSfboConsole
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("LOGIN  - sign in to your Azure AD + SFB Online App using the UCWA API");
+            Console.WriteLine("CONTACT  - list all and add a contact");
             Console.WriteLine("MEETING  - create, list all, and delete an online meeting");
             Console.WriteLine("PRESENCE  - change your presence to be away");
             Console.WriteLine("HELP  - displays this page");
@@ -200,21 +227,47 @@ namespace UcwaSfboConsole
         {
             #region Login
 
-            Console.WriteLine("Let's gather username and password credentials from the user");
-            var uc = GetUserCredentials();
+            // We do this to ensure logins with different accounts work 
+            // during the same launch of the app
 
-            Console.WriteLine("Let's validate the user's credentials before beginning UCWA AutoDiscovery");
+            authenticationContext.TokenCache.Clear();
+
+            Console.WriteLine("How do you want to login?");
+            Console.WriteLine("console or dialog>");
+            string loginStyle = Console.ReadLine().ToLower();
+
             AuthenticationResult testCredentials = null;
-            testCredentials = UcwaSfbo.AzureAdAuth.GetAzureAdToken(sfboResourceAppId, uc, tenant, clientId, aadInstance);
+            UserCredential uc = null;
 
-            if(testCredentials == null)
+            if (loginStyle == "console")
+            {
+                uc = GetUserCredentials();
+                testCredentials = UcwaSfbo.AzureAdAuth.GetAzureAdToken(authenticationContext, sfboResourceAppId, clientId, redirectUri, uc);
+            }
+            else if(loginStyle == "dialog")
+            {
+                if(redirectUri == String.Empty)
+                {
+                    Console.WriteLine("You haven't defined redirectUri which is needed if you want to sign in with a dialog");
+                    return;
+                }
+                testCredentials = UcwaSfbo.AzureAdAuth.GetAzureAdToken(authenticationContext, sfboResourceAppId, clientId, redirectUri, uc);
+            }
+            else
+            {
+                Console.Write("Please select a login style and try again");
+                Console.Write("\n");
+                return;
+            }
+
+            if (testCredentials == null)
             {
                 Console.WriteLine("We encountered an Azure AD error");
                 Console.WriteLine("Check your tenant, clientID, and credentials");
                 return;
             }
 
-            ucwaApplicationsUri = UcwaAutodiscovery.GetUcwaRootUri(sfboResourceAppId, uc, tenant, clientId, aadInstance);
+            ucwaApplicationsUri = UcwaAutodiscovery.GetUcwaRootUri(authenticationContext, sfboResourceAppId, clientId, redirectUri, uc);
 
             Console.WriteLine("We'll store the base UCWA app URI for use with UCWA app calls");
             Console.WriteLine("We prefix this to the links returned from the UCWA apps POST");
@@ -224,7 +277,7 @@ namespace UcwaSfboConsole
 
             Console.WriteLine("Get a token to access the user's UCWA Applications Resources from Azure AD.");
             Console.WriteLine("We can re-use this token for each UCWA app call");
-            ucwaAuthenticationResult = AzureAdAuth.GetAzureAdToken(ucwaApplicationsHost, uc, tenant, clientId, aadInstance);
+            ucwaAuthenticationResult = AzureAdAuth.GetAzureAdToken(authenticationContext, ucwaApplicationsHost, clientId, redirectUri, uc);
 
             Console.WriteLine("Now we'll create and/or query UCWA Apps via POST");
             Console.WriteLine("Well create a UCWA apps object to pass to CreateUcwaApps");
@@ -240,6 +293,47 @@ namespace UcwaSfboConsole
             createUcwaAppsResults = UcwaApplications.CreateUcwaApps(ucwaAuthenticationResult, ucwaApplicationsUri, ucwaMyAppsObject);
 
             return;
+        }
+
+        static void Contact()
+        {
+            if (ucwaAuthenticationResult == null)
+            {
+                Console.WriteLine("You haven't logged in yet!");
+                return;
+            }
+
+            Console.WriteLine("Now we'll list all of your contacts and which group(s) they are in");
+            UcwaMyGroupMemberships.ListMyGroupMemberships(ucwaAuthenticationResult, createUcwaAppsResults, ucwaApplicationsHost);
+
+            Console.WriteLine("Now enter the address of a contact to add: i.e. user@" + tenant);
+            Console.WriteLine("Hit enter if you don't want to add a contact");
+            Console.WriteLine("contact to add>");
+            var ucwaAddContactUri = Console.ReadLine().ToLower();
+            if (ucwaAddContactUri != "")
+            {
+                UcwaMyGroupMemberships.AddMyGroupMemberships(ucwaAuthenticationResult, createUcwaAppsResults, ucwaApplicationsHost, ucwaAddContactUri);
+            }
+            else
+            {
+                Console.WriteLine("Not adding a contact");
+            }
+
+            Console.WriteLine("Now enter the address of a contact to delete: i.e. " + ucwaAddContactUri);
+            Console.WriteLine("Hit enter if you don't want to delete a contact");
+            Console.WriteLine("contact to delete>");
+
+            var ucwaDeleteContactUri = Console.ReadLine().ToLower();
+            if (ucwaDeleteContactUri != "")
+            {
+                UcwaMyGroupMemberships.DeleteMyGroupMemberships(ucwaAuthenticationResult, createUcwaAppsResults, ucwaApplicationsHost, ucwaDeleteContactUri);
+            }
+            else
+            {
+                Console.WriteLine("Not deleting  a contact");
+            }
+
+
         }
 
         // create a meeting, list all meetings, delete the created meeting, and list all meetings again
@@ -287,6 +381,31 @@ namespace UcwaSfboConsole
 
         }
 
+
+        static void SendMessage()
+        {
+            if (ucwaAuthenticationResult == null)
+            {
+                Console.WriteLine("You haven't logged in yet!");
+                return;
+            }
+
+            Console.WriteLine("Please enter the person you want to message");
+            string messageReceiver = Console.ReadLine();
+
+            Console.WriteLine("Please enter the message you want to send");
+            string messageBody = Console.ReadLine();
+
+            if(messageReceiver == "" || messageBody == "")
+            {
+                Console.WriteLine("You need to enter both a receiver and message");
+                return;
+            }
+
+
+
+        }
+
         // try to set the user's presence
         // first, try to make the user available if they're not
         // then, set their presence
@@ -300,7 +419,11 @@ namespace UcwaSfboConsole
             }
 
             Console.WriteLine("Please enter which presence value you want");
-            Console.WriteLine("Away BeRightBack Busy DoNotDisturb Offwork Online");
+            foreach(var v in UcwaPresence.UcwaPresenceOptions)
+            {
+                Console.Write(v.ToString() + " ");
+            }
+            Console.Write("\n");
             Console.WriteLine("Presence>");
             string userPresence = Console.ReadLine();
             if (!UcwaPresence.UcwaPresenceOptions.Contains(userPresence,StringComparer.CurrentCultureIgnoreCase))

@@ -6,14 +6,9 @@ namespace UcwaSfboConsole.UcwaSfbo
 {
     public class AzureAdAuth
     {
-
-        public static AuthenticationResult GetAzureAdToken(String resourceHostUri, UserCredential uc, String tenant, string clientId, string aadInstance)
-        {
-            // Initialize the Authority and AuthenticationContext for the AAD tenant of choice.
-
-            var authority = String.Format(CultureInfo.InvariantCulture, aadInstance, tenant);
-        
-            var authContext = new AuthenticationContext(authority);
+        public static AuthenticationResult GetAzureAdToken(AuthenticationContext authContext, String resourceHostUri,
+            string clientId, string redirectUri, UserCredential uc)
+        { 
 
             AuthenticationResult authenticationResult = null;
 
@@ -27,10 +22,21 @@ namespace UcwaSfboConsole.UcwaSfbo
                     Console.WriteLine("Normalized the resourceHostUri to just the protocol and hostname " + resourceHostUri);
                 }
 
-                authenticationResult = authContext.AcquireTokenAsync(resourceHostUri, clientId, uc).Result;
+                // check if there's a user credential - i.e. a username and password
+
+                if(uc != null)
+                    {
+                    authenticationResult = authContext.AcquireTokenAsync(resourceHostUri, clientId, uc).Result;
+
+                }
+                else {
+                    PlatformParameters platformParams = new PlatformParameters(PromptBehavior.Auto);
+                    authenticationResult = authContext.AcquireTokenAsync(resourceHostUri, clientId, new Uri(redirectUri), platformParams).Result;
+                }
+
                 //Console.WriteLine("Bearer token from Azure AD is " + authenticationResult.AccessToken);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("An unexpected error occurred.");
@@ -45,7 +51,6 @@ namespace UcwaSfboConsole.UcwaSfbo
             }
 
             return authenticationResult;
-
         }
     }
 }

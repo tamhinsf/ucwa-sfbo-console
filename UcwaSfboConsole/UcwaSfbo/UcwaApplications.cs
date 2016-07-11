@@ -15,7 +15,7 @@ namespace UcwaSfboConsole.UcwaSfbo
             public string EndpointId { get; set; }
             public string Culture { get; set; }
         }
-    
+
         public static string CreateUcwaApps(AuthenticationResult ucwaAuthenticationResult, string ucwaApplicationsRootUri,
             UcwaMyAppsObject ucwaAppsObject)
         {
@@ -37,7 +37,6 @@ namespace UcwaSfboConsole.UcwaSfbo
 
             return createUcwaAppsResults;
         }
-
 
     }
 }

@@ -108,6 +108,7 @@
     <Compile Include="UcwaSfbo\UcwaApplications.cs" />
     <Compile Include="UcwaSfbo\UcwaAutodiscovery.cs" />
     <Compile Include="UcwaSfbo\AzureAdAuth.cs" />
+    <Compile Include="UcwaSfbo\UcwaMyGroupMemberships.cs" />
     <Compile Include="UcwaSfbo\Utils.cs" />
     <Compile Include="UcwaSfbo\UcwaMakeMeAvailable.cs" />
     <Compile Include="UcwaSfbo\UcwaMyOnlineMeetings.cs" />
