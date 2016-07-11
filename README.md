@@ -1,13 +1,14 @@
-﻿# Create Skype for Business Online Apps using the UCWA API and Password Authentication
+﻿# Create Skype for Business Online Apps using the UCWA API
 
-This example demonstrates how to create a Skype for Business Online (SfBO) app using the UCWA API and password authentication.   
+This example demonstrates how to create a Skype for Business Online (SfBO) app using the UCWA API   
 
-Many of you have created Skype for Business On-Premise integrations using UCWA and password authentication.  This interactive, console-based .NET application will demonstrate how you can do the same using Skype for Business Online.  The input and result of backend calls will be displayed so you can understand the flow.  You'll be able to sign in, create an application, create/list/delete an online meeting, and make a user available with a specific presence value.
+Many of you have created Skype for Business On-Premise integrations using UCWA and password authentication.  This interactive, console-based .NET application will demonstrate how you can do the same using Skype for Business Online.  You'll also see how you can accept user credentials using a pre-built dialg box.  
 
-Skype for Business Online works with Azure Active Directory to perform user authentication.  We'll be using the methods described [here](http://www.cloudidentity.com/blog/2014/07/08/using-adal-net-to-authenticate-users-via-usernamepassword/) to perform direct username and password authentication
+Skype for Business Online works with Azure Active Directory to perform user authentication.  We'll be using the methods described [here](http://www.cloudidentity.com/blog/2014/07/08/using-adal-net-to-authenticate-users-via-usernamepassword/) to perform direct username and password authentication using the [ADAL library](https://www.nuget.org/packages/Microsoft.IdentityModel.Clients.ActiveDirectory), which also provides access to dialog box based-authentication.
 
-Future versions of this example may demonstrate how to authenticate with OAuth and provide a related nuget package.  Watch us for updates! 
+The input and result of backend calls will be displayed so you can understand the flow.  You'll be able to sign in, create an application, create/list/delete an online meeting, list all contacts, add and delete a contact, and make a user available with a specific presence value.
 
+Future versions of this example may provide a related nuget package.  Watch us for updates! 
 
 ## Setup a development environment
 
@@ -28,7 +29,7 @@ Future versions of this example may demonstrate how to authenticate with OAuth a
 * Sign in to your Azure Management Portal at https://manage.windowsazure.com
 * Select Active Directory -> Applications.  Click Add at the bottom of the screen to "Add an application my organization is developing."
     * Name: SfboUcwa (anything will work)
-    * Redirect URI: http://localhost (anything will work)
+    * Redirect URI: http://demo-sfbo-ucwa (anything will work)
 * Once Azure has created your app, copy your Client ID and give your application access to SfBO.  
    * Click "configure" on your app's page
    * Copy the Client ID
@@ -40,6 +41,7 @@ Future versions of this example may demonstrate how to authenticate with OAuth a
      * Create Skype Meetings
      * Initiate conversations and join meetings
      * Read/write Skype user information (preview)
+     * Read/write Skype user contacts and groups
    * Click Save at the bottom of the page
 * Copy your Tenant name, which is typically in the form of your-domain.onmicrosoft.com.  You can also use your Tenant ID in its place.
   * While still logged into manage.windowsazure.com, Select Active Directory -> Name of the directory where you created your app.
@@ -52,15 +54,16 @@ Future versions of this example may demonstrate how to authenticate with OAuth a
 ## Build and Run UcwaSfboConsole
 
 * Open the cloned code from this repository in Visual Studio
-* Update Program.cs in the UcwaSfboConsole folder with your Client ID and Tenant name
-* Optionally, you can hard code the username (i.e. username@your-domain.onmicrosoft.com) and password you want to use
+* Update Program.cs in the UcwaSfboConsole folder with your Client ID (clientId) and Tenant name (tenant)
+* Optionally, you can hard code the username (i.e. username@your-domain.onmicrosoft.com) and password you want to use in the variables called hardcodedUsername and hardcodedPassword
+* Optionally, if you want to try dialog box authentication, update the redirectUri variable to be the value of Redirect URI you provided to Azure AD (i.e. http://demo-sfo-ucwa)
 * Build and run the app: UcwaSfboConsole
 
 ## Using UcwaSfboConsole
  
-You'll be presented with a number of options.  Begin with "login" and enter the credentials of the user you identified earlier.  You'll see the output of the UCWA Autodiscovery flow.
+You'll be presented with a number of options.  Begin with "login".  Choose if you want to enter credentials of the user you identified earlier in "console" or "dialog" mode.  You'll see the output of the UCWA Autodiscovery flow.
  
-After you login, you can type "meeting" to see the flow related to creating, listing, and deleting a meeting using UCWA's MyOnlineMeeting resource.  "Presence" will first make a call to UCWA's MakeMeAvailable resource and, if necessary, Presence to set your presence to one of the displayed values.
+After you login, you can type "meeting" to see the flow related to creating, listing, and deleting a meeting using UCWA's MyOnlineMeeting resource.  "Presence" will first make a call to UCWA's MakeMeAvailable resource and, if necessary, Presence to set your presence to one of the displayed values.  "Contact" will list your contacts, and give you the option to add or delete a contact.
 
 ## Questions and comments
 
