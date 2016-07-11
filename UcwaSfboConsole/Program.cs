@@ -14,7 +14,7 @@ namespace UcwaSfboConsole
         // replace tenant with the name of your Azure AD instance
         // this is usually in the form of your-tenant.onmicrosoft.com
 
-        private static string tenant = "MOD839792.onmicrosoft.com";
+        private static string tenant = "";
 
         // replace clientID with the clientID of the SFBO native app you created
         // in your Azure AD instance.  
@@ -24,7 +24,7 @@ namespace UcwaSfboConsole
         // Initiate conversations and join meetings
         // Read/write Skype user information (preview)
 
-        private static string clientId = "513366ab-12c6-4f85-8e4a-b3bdeccdecbb";
+        private static string clientId = "";
 
         // sfboResourceAppId is a constant you don't have to change
 
@@ -34,9 +34,10 @@ namespace UcwaSfboConsole
 
         // replace redirectUri with the redirect URI of the native app you created
         // in your Azure AD instance.  you will only need this if you choose to login
-        // using the dialog option 
+        // using the dialog option.  If you're following the example in the README, you will have
+        // used the value https://demo-sfbo-ucwa
 
-        private static string redirectUri = "https://demo-sfbo-ucwa";
+        private static string redirectUri = "";
 
         // authenticationContext is initialized with the values of your
         // aadInstance and tenant
@@ -227,6 +228,7 @@ namespace UcwaSfboConsole
         {
             #region Login
 
+            // Clear any cached tokens.
             // We do this to ensure logins with different accounts work 
             // during the same launch of the app
 
@@ -381,30 +383,6 @@ namespace UcwaSfboConsole
 
         }
 
-
-        static void SendMessage()
-        {
-            if (ucwaAuthenticationResult == null)
-            {
-                Console.WriteLine("You haven't logged in yet!");
-                return;
-            }
-
-            Console.WriteLine("Please enter the person you want to message");
-            string messageReceiver = Console.ReadLine();
-
-            Console.WriteLine("Please enter the message you want to send");
-            string messageBody = Console.ReadLine();
-
-            if(messageReceiver == "" || messageBody == "")
-            {
-                Console.WriteLine("You need to enter both a receiver and message");
-                return;
-            }
-
-
-
-        }
 
         // try to set the user's presence
         // first, try to make the user available if they're not
