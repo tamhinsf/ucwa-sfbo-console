@@ -241,31 +241,36 @@ namespace UcwaSfboConsole
             authenticationContext.TokenCache.Clear();
 
             Console.WriteLine("How do you want to login?");
-            Console.WriteLine("console or dialog>");
-            string loginStyle = Console.ReadLine().ToLower();
+            Console.WriteLine("console | dialog | code >");
+            string loginStyle = Console.ReadLine();
 
             AuthenticationResult testCredentials = null;
             UserCredential uc = null;
 
-            if (loginStyle == "console")
+            switch (loginStyle.ToLower())
             {
-                uc = GetUserCredentials();
-                testCredentials = UcwaSfbo.AzureAdAuth.GetAzureAdToken(authenticationContext, sfboResourceAppId, clientId, redirectUri, uc);
-            }
-            else if(loginStyle == "dialog")
-            {
-                if(redirectUri == String.Empty)
-                {
-                    Console.WriteLine("You haven't defined redirectUri which is needed if you want to sign in with a dialog");
+                case "console":
+                    uc = GetUserCredentials();
+                    testCredentials = UcwaSfbo.AzureAdAuth.GetAzureAdToken(authenticationContext, sfboResourceAppId, clientId, redirectUri, uc);
+                    break;
+                case "dialog":
+                    if (redirectUri == String.Empty)
+                    {
+                        Console.WriteLine("You haven't defined redirectUri which is needed if you want to sign in with a dialog");
+                        return;
+                    }
+                    testCredentials = UcwaSfbo.AzureAdAuth.GetAzureAdToken(authenticationContext, sfboResourceAppId, clientId, redirectUri, uc);
+                    break;
+                case "code":
+                    DeviceCodeResult deviceCodeResult = authenticationContext.AcquireDeviceCodeAsync(sfboResourceAppId, clientId).Result;
+                    Console.WriteLine(deviceCodeResult.Message);
+                    Console.WriteLine("Or, use Control-C to exit the app");
+                    testCredentials = authenticationContext.AcquireTokenByDeviceCodeAsync(deviceCodeResult).Result;
+                    break;
+                default:
+                    Console.Write("Please select a login style and try again");
+                    Console.Write("\n");
                     return;
-                }
-                testCredentials = UcwaSfbo.AzureAdAuth.GetAzureAdToken(authenticationContext, sfboResourceAppId, clientId, redirectUri, uc);
-            }
-            else
-            {
-                Console.Write("Please select a login style and try again");
-                Console.Write("\n");
-                return;
             }
 
             if (testCredentials == null)
