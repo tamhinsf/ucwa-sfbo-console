@@ -42,8 +42,9 @@ namespace UcwaSfboConsole
         // authenticationContext is initialized with the values of your
         // aadInstance and tenant
 
-        private static AuthenticationContext authenticationContext = 
-            new AuthenticationContext(String.Format(CultureInfo.InvariantCulture, aadInstance, tenant));
+        // if aadInstance and tenant are null, you won't be able to launch
+
+        private static AuthenticationContext authenticationContext = null;
 
         // feeling lazy?  hard code your username and password in the variables below 
         // if values are present, the "login" command will automatically use them and not
@@ -110,6 +111,11 @@ namespace UcwaSfboConsole
                 Console.WriteLine("and application clientId in Program.cs before");
                 Console.WriteLine("you can run this app");
                 return;
+            }
+            else
+            {
+                authenticationContext = new AuthenticationContext
+                    (String.Format(CultureInfo.InvariantCulture, aadInstance, tenant));
             }
 
             Help();
@@ -334,7 +340,6 @@ namespace UcwaSfboConsole
             {
                 Console.WriteLine("Not deleting  a contact");
             }
-
 
         }
 
