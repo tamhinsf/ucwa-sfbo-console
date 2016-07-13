@@ -31,6 +31,7 @@ Future versions of this example may provide a related nuget package.  Watch us f
 * Sign in to your Azure Management Portal at https://manage.windowsazure.com
 * Select Active Directory -> Applications.  Click Add at the bottom of the screen to "Add an application my organization is developing."
     * Name: SfboUcwa (anything will work)
+    * Type: NATIVE CLIENT APPLICATION
     * Redirect URI: http://demo-sfbo-ucwa (anything will work)
 * Once Azure has created your app, copy your Client ID and give your application access to SfBO.  
    * Click "configure" on your app's page
@@ -45,7 +46,7 @@ Future versions of this example may provide a related nuget package.  Watch us f
      * Read/write Skype user information (preview)
      * Read/write Skype user contacts and groups
    * Click Save at the bottom of the page
-* Copy your Tenant name, which is typically in the form of your-domain.onmicrosoft.com.  You can also use your Tenant ID in its place.
+* Copy your Tenant name, which is typically in the form of your-domain.onmicrosoft.com.  You can also use your Tenant ID in its place.  How do you find your Tenant ID?
   * While still logged into manage.windowsazure.com, Select Active Directory -> Name of the directory where you created your app.
   * Select Applications.  Click View Endpoints at the bottom of the page.
   * Your Tenant ID is the alphanumeric value separated by dashes, immediate after the hostname.  Make sure you copy the entire value: it's between the "/" characters.
