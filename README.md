@@ -6,9 +6,9 @@ Many of you have created Skype for Business On-Premise integrations using UCWA a
 
 Skype for Business Online works with Azure Active Directory to perform user authentication.  We'll be using the methods described [here](http://www.cloudidentity.com/blog/2014/07/08/using-adal-net-to-authenticate-users-via-usernamepassword/) to perform direct username and password authentication using the [ADAL library](https://www.nuget.org/packages/Microsoft.IdentityModel.Clients.ActiveDirectory), which also provides access to dialog box based-authentication as well as [device code](www.cloudidentity.com/blog/2015/12/02/new-adal-3-x-previewdevice-profile-linux-and-os-x-sample/) initiated sign-in.
 
-## UCWA Autodiscovery Demistified!
+## UCWA Autodiscovery Demistified
 
-The input and result of UCWA and Azure AD backend calls will be displayed so you can understand the flow.  You'll be able to sign in, create an application, create/list/delete an online meeting, list all contacts, add and delete a contact, and make a user available with a specific presence value.
+The input and result of Skype for Business Online UCWA and Azure AD backend calls will be displayed so you can understand the flow.  You'll be able to sign in, create an application, create/list/delete an online meeting, list all contacts, add and delete a contact, and make a user available with a specific presence value.
 
 Future versions of this example may provide a related nuget package.  Watch us for updates!   In the meantime, use our example to begin migrating your Skype for Business On-Premise apps to Skype for Business Online.
 
