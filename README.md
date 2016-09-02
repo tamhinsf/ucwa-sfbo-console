@@ -1,10 +1,14 @@
 ﻿# Create Skype for Business Online Apps using the UCWA API
 
-This example demonstrates how to create a Skype for Business Online (SfBO) app using the UCWA API   
+This example demonstrates how to create a Skype for Business Online (SfBO) app using UCWA    
 
-Many of you have created Skype for Business On-Premise integrations using UCWA and password authentication.  This interactive, console-based .NET application will demonstrate how you can do the same using Skype for Business Online.  You'll also see how you can accept user credentials using a pre-built dialog box.  Deploying to device without a web browser?  No problem!  You show a message that tells users to visit a website on another device where they can enter a unique code to begin sign in.  
+Many of you have created Skype for Business On-Premise integrations using UCWA -  Microsoft’s Unified Communications Web API.   This interactive, console-based .NET application will demonstrate how you can do the same using Skype for Business Online.  You'll also see how you can accept user credentials using a platform-specific, pre-built dialog box.  Deploying to device without a web browser?  No problem!  You can show a message that tells users to visit a website on another device where they can enter a unique code to begin sign in.  Direct username and password entry to a console is demonstrated as well.
 
 Skype for Business Online works with Azure Active Directory to perform user authentication.  We'll be using the methods described [here](http://www.cloudidentity.com/blog/2014/07/08/using-adal-net-to-authenticate-users-via-usernamepassword/) to perform direct username and password authentication using the [ADAL library](https://www.nuget.org/packages/Microsoft.IdentityModel.Clients.ActiveDirectory), which also provides access to dialog box based-authentication as well as [device code](www.cloudidentity.com/blog/2015/12/02/new-adal-3-x-previewdevice-profile-linux-and-os-x-sample/) initiated sign-in.
+
+#### Breaking Change 9/2/2016
+
+We've made a breaking change to the UCWA functions that make a network call: you're now required to pass a System.Net.Http.HttpClient to each of them.  Why?  HttpClient doesn't clean up after itself and progressively consumes more resources.  We suggest you create a single HttpClient for your app (it's thread safe!), and pass it to each call you make.  The included example app has already been updatd. 
 
 ## UCWA Autodiscovery Demistified
 
@@ -22,7 +26,7 @@ Future versions of this example may provide a related nuget package.  Watch us f
 * Sign in to your Office 365 environment as an administrator at [https://portal.office.com/admin/default.aspx](https://portal.office.com/admin/default.aspx)
 * Find a user whose account you'd like to use with this example
   * Ensure the user's "Product licenses" gives them access to SfBO.  
-  * Disable any multi-factor authentication for this account
+  * Disable any multi-factor authentication for this account if you're using direct username and password authentication.
   * If you're resetting a user's password, make sure you un-select "Make this user change their password ..."
   * If you're creating a new user or assigning a license to an existing user, you'll need to wait an hour before they can sign in to SfBO (and thus, this example).
 
