@@ -1,8 +1,8 @@
 ﻿# Create Skype for Business Online Apps using the UCWA API
 
-This example demonstrates how to create a Skype for Business Online (SfBO) app using UCWA    
+This example demonstrates how to create a Skype for Business Online (SfBO) app using UCWA - Microsoft’s Unified Communications Web API
 
-Many of you have created Skype for Business On-Premise integrations using UCWA -  Microsoft’s Unified Communications Web API.   This interactive, console-based .NET application will demonstrate how you can do the same using Skype for Business Online.  You'll also see how you can accept user credentials using a platform-specific, pre-built dialog box.  Deploying to device without a web browser?  No problem!  You can show a message that tells users to visit a website on another device where they can enter a unique code to begin sign in.  Direct username and password entry to a console is demonstrated as well.
+Many of you have created Skype for Business On-Premise integrations using UCWA.  This interactive, console-based .NET application will demonstrate how you can do the same using Skype for Business Online.  You'll also see how you can accept user credentials using a platform-specific, pre-built dialog box.  Deploying to device without a web browser?  No problem!  You can show a message that tells users to visit a website on another device where they can enter a unique code to begin sign in.  Direct username and password entry to a console is demonstrated as well.
 
 Skype for Business Online works with Azure Active Directory to perform user authentication.  We'll be using the methods described [here](http://www.cloudidentity.com/blog/2014/07/08/using-adal-net-to-authenticate-users-via-usernamepassword/) to perform direct username and password authentication using the [ADAL library](https://www.nuget.org/packages/Microsoft.IdentityModel.Clients.ActiveDirectory), which also provides access to dialog box based-authentication as well as [device code](www.cloudidentity.com/blog/2015/12/02/new-adal-3-x-previewdevice-profile-linux-and-os-x-sample/) initiated sign-in.
 
