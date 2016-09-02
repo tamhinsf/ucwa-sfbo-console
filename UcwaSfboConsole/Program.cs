@@ -15,7 +15,7 @@ namespace UcwaSfboConsole
         // replace tenant with the name of your Azure AD instance
         // this is usually in the form of your-tenant.onmicrosoft.com
 
-        private static string tenant = "mod839792.onmicrosoft.com";
+        private static string tenant = "";
 
         // replace clientID with the clientID of the SFBO native app you created
         // in your Azure AD instance.  
@@ -25,12 +25,11 @@ namespace UcwaSfboConsole
         // Initiate conversations and join meetings
         // Read/write Skype user information (preview)
 
-        private static string clientId = "513366ab-12c6-4f85-8e4a-b3bdeccdecbb";
+        private static string clientId = "";
 
         // sfboResourceAppId is a constant you don't have to change
 
         private static string sfboResourceAppId = "00000004-0000-0ff1-ce00-000000000000";
-//        private static string sfboResourceAppId = "https://graph.microsoft.com";
 
         private static string aadInstance = "https://login.microsoftonline.com/{0}";
 
@@ -52,8 +51,8 @@ namespace UcwaSfboConsole
         // if values are present, the "login" command will automatically use them and not
         // prompt you for credentials
 
-        private static string hardcodedUsername = "annew@mod839792.onmicrosoft.com";
-        private static string hardcodedPassword = "CSOD2016go!";
+        private static string hardcodedUsername = "";
+        private static string hardcodedPassword = "";
 
         // we've set up some global variables you'll use across UCWA API calls
         // to access user resources
