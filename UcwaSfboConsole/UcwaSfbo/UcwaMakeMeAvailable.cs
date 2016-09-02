@@ -35,12 +35,13 @@ namespace UcwaSfboConsole.UcwaSfbo
             return getMakeMeAvailableUri;
         }
 
-        public static bool MakeMeAvailable(AuthenticationResult ucwaAuthenticationResult, String ucwaMakeMeAvailableRootUri,
+        public static bool MakeMeAvailable(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult, String ucwaMakeMeAvailableRootUri,
             UcwaMakeMeAvailableObject ucwaMyPresenceObject)
         {
             string makeMeAvailableResults = string.Empty;
             Console.WriteLine("URI is " + ucwaMakeMeAvailableRootUri);
-            var httpClient = new HttpClient();
+
+            httpClient.DefaultRequestHeaders.Clear();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var makeMeAvailablePostData = JsonConvert.SerializeObject(ucwaMyPresenceObject);

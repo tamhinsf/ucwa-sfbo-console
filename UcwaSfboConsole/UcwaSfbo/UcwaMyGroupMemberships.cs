@@ -11,10 +11,10 @@ namespace UcwaSfboConsole.UcwaSfbo
 {
     public class UcwaMyGroupMemberships
     {
-        private static string GetMyGroupMembershipsResource(AuthenticationResult ucwaAuthenticationResult, 
+        private static string GetMyGroupMembershipsResource(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult, 
             String ucwaMyGroupMembershipsRootUri)
         {
-            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Clear();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var httpResponseMessage =
@@ -37,19 +37,19 @@ namespace UcwaSfboConsole.UcwaSfbo
             return ucwaMyGroupMembershipsRootUri;
         }
 
-        public static void ListMyGroupMemberships(AuthenticationResult ucwaAuthenticationResult,
+        public static void ListMyGroupMemberships(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult,
             String createUcwaAppsResults, String ucwaApplicationsHost) 
         {
             var ucwaMyGroupMembershipsRootUri = GetMyGroupMembershipsRootUri(createUcwaAppsResults, ucwaApplicationsHost);
-            var ucwaMyGroupMembershipsResource = GetMyGroupMembershipsResource(ucwaAuthenticationResult, ucwaMyGroupMembershipsRootUri);
+            var ucwaMyGroupMembershipsResource = GetMyGroupMembershipsResource(httpClient,ucwaAuthenticationResult, ucwaMyGroupMembershipsRootUri);
         }
 
-        public static bool AddMyGroupMemberships(AuthenticationResult ucwaAuthenticationResult,
+        public static bool AddMyGroupMemberships(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult,
             String createUcwaAppsResults, String ucwaApplicationsHost, String ucwaContactUri)
         {
             var ucwaMyGroupMembershipsRootUri = GetMyGroupMembershipsRootUri(createUcwaAppsResults, ucwaApplicationsHost);
 
-            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Clear();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpClient.DefaultRequestHeaders.Add("X-MS-RequiresMinResourceVersion", "2");
@@ -69,18 +69,18 @@ namespace UcwaSfboConsole.UcwaSfbo
 
         }
 
-        public static bool DeleteMyGroupMemberships(AuthenticationResult ucwaAuthenticationResult,
+        public static bool DeleteMyGroupMemberships(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult,
             String createUcwaAppsResults, String ucwaApplicationsHost, String ucwaContactUri)
         {
             var ucwaMyGroupMembershipsRootUri = GetMyGroupMembershipsRootUri(createUcwaAppsResults, ucwaApplicationsHost);
-            var ucwaMyGroupMembershipsResource = GetMyGroupMembershipsResource(ucwaAuthenticationResult, ucwaMyGroupMembershipsRootUri);
+            var ucwaMyGroupMembershipsResource = GetMyGroupMembershipsResource(httpClient,ucwaAuthenticationResult, ucwaMyGroupMembershipsRootUri);
 
             dynamic myGroupMembershipResultsObject = JObject.Parse(ucwaMyGroupMembershipsResource);
             var ucwaDeleteMyGroupMembershipsRootUri = ucwaApplicationsHost +
                   myGroupMembershipResultsObject._links.removeContactFromAllGroups.href;
             Console.WriteLine("ucwaDeleteMyGroupMembershipsRootUri is " + ucwaDeleteMyGroupMembershipsRootUri);
 
-            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Clear();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpClient.DefaultRequestHeaders.Add("X-MS-RequiresMinResourceVersion", "2");

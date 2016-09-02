@@ -16,12 +16,12 @@ namespace UcwaSfboConsole.UcwaSfbo
             public string Culture { get; set; }
         }
 
-        public static string CreateUcwaApps(AuthenticationResult ucwaAuthenticationResult, string ucwaApplicationsRootUri,
+        public static string CreateUcwaApps(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult, string ucwaApplicationsRootUri,
             UcwaMyAppsObject ucwaAppsObject)
         {
             string createUcwaAppsResults = string.Empty;
 
-            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Clear();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var createUcwaPostData = JsonConvert.SerializeObject(ucwaAppsObject);

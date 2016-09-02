@@ -27,12 +27,12 @@ namespace UcwaSfboConsole.UcwaSfbo
             return ucwaMyOnlineMeetingsUserRootUri;
         }
 
-        public static string CreateMyOnlineMeeting(AuthenticationResult ucwaAuthenticationResult, String ucwaMyOnlineMeetingsUserRootUri,
+        public static string CreateMyOnlineMeeting(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult, String ucwaMyOnlineMeetingsUserRootUri,
             String ucwaApplicationHostRootUri, UcwaMyOnlineMeetingObject ucwaMyOnlineMeetingObject)
         {
             string ucwaMyCreatedOnlineMeetingUri = String.Empty;
 
-            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Clear();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var createMeetingPostData = JsonConvert.SerializeObject(ucwaMyOnlineMeetingObject);
@@ -53,9 +53,9 @@ namespace UcwaSfboConsole.UcwaSfbo
 
         }
 
-        public static bool DeleteMyOnlineMeeting(AuthenticationResult ucwaAuthenticationResult, string ucwaMyCreatedOnlineMeetingUri)
+        public static bool DeleteMyOnlineMeeting(HttpClient httpClient,AuthenticationResult ucwaAuthenticationResult, string ucwaMyCreatedOnlineMeetingUri)
         {
-            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Clear();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var httpResponseMessage =
@@ -69,9 +69,9 @@ namespace UcwaSfboConsole.UcwaSfbo
             return false;
         }
 
-        public static void ListMyOnlineMeetings(AuthenticationResult ucwaAuthenticationResult, String ucwaMyOnlineMeetingsUserRootUri)
+        public static void ListMyOnlineMeetings(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult, String ucwaMyOnlineMeetingsUserRootUri)
         {
-            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Clear();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var httpResponseMessage =
