@@ -77,12 +77,16 @@ Then, you can type "meeting" to see the flow related to creating, listing, and d
 ## Questions and comments
 
 We'd love to get your feedback about this sample. You can send your questions and suggestions to us in the Issues section of this repository.
-  
+
+Questions about Skype for Business development in general should be posted to [Stack Overflow](http://stackoverflow.com/questions/tagged/skype-for-business). Make sure that your questions or comments are tagged with [skype-for-business].
+
 ## Additional resources
-* [AlexaSkillsKit.NET - .NET library to write Alexa skills that's interface-compatible with Amazon's AlexaSkillsKit for Java and matches that functionality:](https://github.com/AreYouFreeBusy/AlexaSkillsKit.NET)
-* [Getting started with Alexa App development for Amazon Echo using .NET on Windows](https://freebusy.io/blog/getting-started-with-alexa-app-development-for-amazon-echo-using-dot-net)
-* [Getting Started with the Alexa Skills Kit](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/getting-started-guide)
-* [Transport for London Unifed API](https://api-portal.tfl.gov.uk/docs)
+
+* [Developing UCWA applications for Skype for Business Online](https://msdn.microsoft.com/en-us/skype/ucwa/developingucwaapplicationsforsfbonline)
+* [Using ADAL .NET to Authenticate Users via Username/Password](http://www.cloudidentity.com/blog/2014/07/08/using-adal-net-to-authenticate-users-via-usernamepassword/)
+* [How to get an Azure Active Directory tenant](https://azure.microsoft.com/en-us/documentation/articles/active-directory-howto-tenant/)
+* [Skype Developer Platform](https://dev.office.com/skype)
+* [Geting Started - Skype for Business Online](https://dev.office.com/skype/getting-started)
 
 ## Copyright
 
