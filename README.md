@@ -79,7 +79,7 @@ Then, you can type "meeting" to see the flow related to creating, listing, and d
 We'd love to get your feedback about this sample. You can send your questions and suggestions to us in the Issues section of this repository.
 
 Questions about Skype for Business development in general should be posted to [Stack Overflow](http://stackoverflow.com/questions/tagged/skype-for-business). Make sure that your questions or comments are tagged with [skype-for-business].
-  
+
 ## Additional resources
 
 * [Developing UCWA applications for Skype for Business Online](https://msdn.microsoft.com/en-us/skype/ucwa/developingucwaapplicationsforsfbonline)
@@ -90,7 +90,8 @@ Questions about Skype for Business development in general should be posted to [S
 
 ## Copyright
 
-Copyright (c) 2016 Tam Huynh. All rights reserved.
+Copyright (c) 2016 Tam Huynh. All rights reserved. 
+
 
 ### Disclaimer ###
 **THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
