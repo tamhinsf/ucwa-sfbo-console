@@ -38,7 +38,7 @@ namespace UcwaSfboConsole
         // using the dialog option.  If you're following the example in the README, you will have
         // used the value https://demo-sfbo-ucwa
 
-        private static string redirectUri = "";
+        private static string redirectUri = "https://demo-sfbo-ucwa";
 
         // authenticationContext is initialized with the values of your
         // aadInstance and tenant
@@ -449,11 +449,11 @@ namespace UcwaSfboConsole
                 {
                     return;
                 }
-                else
-                {
-                    Console.WriteLine("Looks like we encountered an error.  Wait before trying this again");
-                    return;
-                }
+                //else
+                //{
+                //    Console.WriteLine("Looks like we encountered an error.  Wait before trying this again");
+                //    return;
+                //}
             }
 
             Console.WriteLine("Whoops! MakeMeAvailable isn't in createUcwaAppsResults");
