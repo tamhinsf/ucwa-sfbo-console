@@ -55,8 +55,13 @@ Future versions of this example may provide a related nuget package.  Watch us f
   * Select Applications.  Click View Endpoints at the bottom of the page.
   * Your Tenant ID is the alphanumeric value separated by dashes, immediate after the hostname.  Make sure you copy the entire value: it's between the "/" characters.
  
-  ![](https://acom.azurecomcdn.net/80C57D/cdn/mediahandler/docarticles/dpsmedia-prod/azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/20160525050127/save-tenant.png)
-    
+ 
+  ![Tenant ID Example](https://raw.githubusercontent.com/OfficeDev/TrainingContent/master/O3653/O3653-8%20Deep%20Dive%20into%20the%20Office%20365%20Unified%20API/Images/Figure04.png)
+   
+   
+* Applications built using the UCWA API for Skype for Business Online require tenant consent.  Perform the steps here as an admin to enable users to sign in to the application we're creating:
+   
+   https://msdn.microsoft.com/en-us/skype/websdk/docs/developwebsdkappsforsfbonline#tenant-administrator-consent-flow
   
 ## Build and Run UcwaSfboConsole
 
