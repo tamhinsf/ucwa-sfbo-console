@@ -1,6 +1,8 @@
-﻿# Create Skype for Business Online Apps using the UCWA API
+# Create Skype for Business Online Apps and Meetings using the UCWA API
 
-This example demonstrates how to create a Skype for Business Online (SfBO) app using UCWA - Microsoft’s Unified Communications Web API
+This example demonstrates how to create Skype for Business Online (SfBO) apps and meetings using UCWA - Microsoft’s Unified Communications Web API
+
+  * Using the Skype for Business Online AppSDK? We'll show you how to create Meeting URLs that you can provide to the iOS and Android AppSDK
 
 Many of you have created Skype for Business On-Premise integrations using UCWA.  This interactive, console-based .NET application will demonstrate how you can do the same using Skype for Business Online.  You'll also see how you can accept user credentials using a platform-specific, pre-built dialog box.  Deploying to device without a web browser?  No problem!  You can show a message that tells users to visit a website on another device where they can enter a unique code to begin sign in.  Direct username and password entry to a console is demonstrated as well.
 
