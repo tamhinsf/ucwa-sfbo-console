@@ -8,9 +8,9 @@ Many of you have created Skype for Business On-Premise integrations using UCWA. 
 
 Skype for Business Online works with Azure Active Directory to perform user authentication.  We'll be using the methods described [here](http://www.cloudidentity.com/blog/2014/07/08/using-adal-net-to-authenticate-users-via-usernamepassword/) to perform direct username and password authentication using the [ADAL library](https://www.nuget.org/packages/Microsoft.IdentityModel.Clients.ActiveDirectory), which also provides access to dialog box based-authentication as well as [device code](www.cloudidentity.com/blog/2015/12/02/new-adal-3-x-previewdevice-profile-linux-and-os-x-sample/) initiated sign-in.
 
-#### Breaking Change 9/2/2016
+#### Breaking Change 3/20/2017
 
-We've made a breaking change to the UCWA functions that make a network call: you're now required to pass a System.Net.Http.HttpClient to each of them.  Why?  HttpClient doesn't clean up after itself and progressively consumes more resources.  We suggest you create a single HttpClient for your app (it's thread safe!), and pass it to each call you make.  The included example app has already been updatd. 
+An instance of System.Net.Http.HttpClient no longer needs to be passed to the methods in UcwaSfbo. Instead, there is a new shared instance residing in Utils.cs as Helpers.SharedHttpClient that they all now reference.  
 
 ## UCWA Autodiscovery Demistified
 
@@ -47,9 +47,10 @@ Future versions of this example may provide a related nuget package.  Watch us f
      * From the pop-up window, select Skype for Business Online.  
      * Click the check mark to close the pop-up.
    * Skype for Business Online should now be below "Permissions to other applications".   Click the down arrow to the right of Delegated Permissions and check at least the following:
-     * Create Skype Meetings
      * Initiate conversations and join meetings
+     * Create Skype Meetings
      * Read/write Skype user information (preview)
+     * Receive conversation invites (preview)
      * Read/write Skype user contacts and groups
    * Click Save at the bottom of the page
 * Copy your Tenant name, which is typically in the form of your-domain.onmicrosoft.com.  You can also use your Tenant ID in its place.  How do you find your Tenant ID?
@@ -68,9 +69,13 @@ Future versions of this example may provide a related nuget package.  Watch us f
 ## Build and Run UcwaSfboConsole
 
 * Open the cloned code from this repository in Visual Studio
-* Update Program.cs in the UcwaSfboConsole folder with your Client ID (clientId) and Tenant name (tenant)
+* Update Program.cs in the UcwaSfboConsole folder with your Tenant name (tenant) and Client ID (clientId) 
+  * Or, leave these values empty and provide them at the command line like so: 
+    * UcwaSfboConsole mytenant.onmicrosoft.com my-alphanumeric-client-id
 * Optionally, you can hard code the username (i.e. username@your-domain.onmicrosoft.com) and password you want to use in the variables called hardcodedUsername and hardcodedPassword
 * Optionally, if you want to try dialog box authentication, update the redirectUri variable to be the value of Redirect URI you provided to Azure AD (i.e. http://demo-sfo-ucwa)
+  * Or, you can provide the Redirect URI as a third command line parameter, like so:
+    * UcwaSfboConsole mytenant.onmicrosoft.com my-alphanumeric-client-id http://demo-sfo-ucwa
 * Build and run the app: UcwaSfboConsole
 
 ## Using UcwaSfboConsole
@@ -97,7 +102,7 @@ Questions about Skype for Business development in general should be posted to [S
 
 ## Copyright
 
-Copyright (c) 2016 Tam Huynh. All rights reserved. 
+Copyright (c) 2017 Tam Huynh. All rights reserved. 
 
 
 ### Disclaimer ###
