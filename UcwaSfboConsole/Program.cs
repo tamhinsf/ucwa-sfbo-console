@@ -112,6 +112,9 @@ namespace UcwaSfboConsole
 
         static void Main(string[] args)
         {
+            // you can provide tenant clientId as command line parameters
+            // you can optionally override redirectUri by making it the third command line parameter
+
             if (args.Length >= 2)
             {
                 tenant = args[0];
