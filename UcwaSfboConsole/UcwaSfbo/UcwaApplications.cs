@@ -4,6 +4,7 @@ using System.Text;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using UcwaSfboConsole.UcwaSfbo;
 
 namespace UcwaSfboConsole.UcwaSfbo
 {
@@ -16,18 +17,17 @@ namespace UcwaSfboConsole.UcwaSfbo
             public string Culture { get; set; }
         }
 
-        public static string CreateUcwaApps(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult, string ucwaApplicationsRootUri,
+        public static string CreateUcwaApps(AuthenticationResult ucwaAuthenticationResult, string ucwaApplicationsRootUri,
             UcwaMyAppsObject ucwaAppsObject)
         {
             string createUcwaAppsResults = string.Empty;
-
-            httpClient.DefaultRequestHeaders.Clear();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Clear();
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var createUcwaPostData = JsonConvert.SerializeObject(ucwaAppsObject);
             Console.WriteLine("CreateUcwaApps POST data is " + createUcwaPostData);
             var httpResponseMessage =
-                httpClient.PostAsync(ucwaApplicationsRootUri, new StringContent(createUcwaPostData, Encoding.UTF8,
+                Helpers.SharedHttpClient.PostAsync(ucwaApplicationsRootUri, new StringContent(createUcwaPostData, Encoding.UTF8,
                 "application/json")).Result;
             Console.WriteLine("CreateUcwaApps response is " + httpResponseMessage.Content.ReadAsStringAsync().Result);
             if (httpResponseMessage.IsSuccessStatusCode)

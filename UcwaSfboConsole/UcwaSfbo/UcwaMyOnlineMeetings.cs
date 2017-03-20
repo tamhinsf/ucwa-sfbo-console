@@ -27,18 +27,18 @@ namespace UcwaSfboConsole.UcwaSfbo
             return ucwaMyOnlineMeetingsUserRootUri;
         }
 
-        public static string CreateMyOnlineMeeting(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult, String ucwaMyOnlineMeetingsUserRootUri,
+        public static string CreateMyOnlineMeeting(AuthenticationResult ucwaAuthenticationResult, String ucwaMyOnlineMeetingsUserRootUri,
             String ucwaApplicationHostRootUri, UcwaMyOnlineMeetingObject ucwaMyOnlineMeetingObject)
         {
             string ucwaMyCreatedOnlineMeetingUri = String.Empty;
 
-            httpClient.DefaultRequestHeaders.Clear();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Clear();
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var createMeetingPostData = JsonConvert.SerializeObject(ucwaMyOnlineMeetingObject);
             Console.WriteLine("CreateMyOnlineMeeting POST data is " + createMeetingPostData);
             var httpResponseMessage =
-                httpClient.PostAsync(ucwaMyOnlineMeetingsUserRootUri, new StringContent(createMeetingPostData, Encoding.UTF8,
+                Helpers.SharedHttpClient.PostAsync(ucwaMyOnlineMeetingsUserRootUri, new StringContent(createMeetingPostData, Encoding.UTF8,
                 "application/json")).Result;
             Console.WriteLine("CreateMyOnlineMeeting response is " + httpResponseMessage.Content.ReadAsStringAsync().Result);
             if (httpResponseMessage.IsSuccessStatusCode)
@@ -53,13 +53,13 @@ namespace UcwaSfboConsole.UcwaSfbo
 
         }
 
-        public static bool DeleteMyOnlineMeeting(HttpClient httpClient,AuthenticationResult ucwaAuthenticationResult, string ucwaMyCreatedOnlineMeetingUri)
+        public static bool DeleteMyOnlineMeeting(AuthenticationResult ucwaAuthenticationResult, string ucwaMyCreatedOnlineMeetingUri)
         {
-            httpClient.DefaultRequestHeaders.Clear();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Clear();
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var httpResponseMessage =
-                httpClient.DeleteAsync(ucwaMyCreatedOnlineMeetingUri).Result;
+                Helpers.SharedHttpClient.DeleteAsync(ucwaMyCreatedOnlineMeetingUri).Result;
             if (httpResponseMessage.IsSuccessStatusCode)
             {
                 Console.WriteLine("DeleteMyOnlineMeeting response is " + httpResponseMessage.Content.ReadAsStringAsync().Result);
@@ -69,13 +69,13 @@ namespace UcwaSfboConsole.UcwaSfbo
             return false;
         }
 
-        public static void ListMyOnlineMeetings(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult, String ucwaMyOnlineMeetingsUserRootUri)
+        public static void ListMyOnlineMeetings(AuthenticationResult ucwaAuthenticationResult, String ucwaMyOnlineMeetingsUserRootUri)
         {
-            httpClient.DefaultRequestHeaders.Clear();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Clear();
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var httpResponseMessage =
-                httpClient.GetAsync(ucwaMyOnlineMeetingsUserRootUri).Result;
+                Helpers.SharedHttpClient.GetAsync(ucwaMyOnlineMeetingsUserRootUri).Result;
             if (httpResponseMessage.IsSuccessStatusCode)
             {
                 Console.WriteLine("ListMyOnlineMeetings response is " + httpResponseMessage.Content.ReadAsStringAsync().Result);

@@ -11,14 +11,14 @@ namespace UcwaSfboConsole.UcwaSfbo
 {
     public class UcwaMyGroupMemberships
     {
-        private static string GetMyGroupMembershipsResource(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult, 
+        private static string GetMyGroupMembershipsResource(AuthenticationResult ucwaAuthenticationResult, 
             String ucwaMyGroupMembershipsRootUri)
         {
-            httpClient.DefaultRequestHeaders.Clear();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Clear();
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var httpResponseMessage =
-                httpClient.GetAsync(ucwaMyGroupMembershipsRootUri).Result;
+                Helpers.SharedHttpClient.GetAsync(ucwaMyGroupMembershipsRootUri).Result;
             if (httpResponseMessage.IsSuccessStatusCode)
             {
                 Console.WriteLine("GetMyGroupMembershipsResource response is " + httpResponseMessage.Content.ReadAsStringAsync().Result);
@@ -37,24 +37,24 @@ namespace UcwaSfboConsole.UcwaSfbo
             return ucwaMyGroupMembershipsRootUri;
         }
 
-        public static void ListMyGroupMemberships(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult,
+        public static void ListMyGroupMemberships(AuthenticationResult ucwaAuthenticationResult,
             String createUcwaAppsResults, String ucwaApplicationsHost) 
         {
             var ucwaMyGroupMembershipsRootUri = GetMyGroupMembershipsRootUri(createUcwaAppsResults, ucwaApplicationsHost);
-            var ucwaMyGroupMembershipsResource = GetMyGroupMembershipsResource(httpClient,ucwaAuthenticationResult, ucwaMyGroupMembershipsRootUri);
+            var ucwaMyGroupMembershipsResource = GetMyGroupMembershipsResource(ucwaAuthenticationResult, ucwaMyGroupMembershipsRootUri);
         }
 
-        public static bool AddMyGroupMemberships(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult,
+        public static bool AddMyGroupMemberships(AuthenticationResult ucwaAuthenticationResult,
             String createUcwaAppsResults, String ucwaApplicationsHost, String ucwaContactUri)
         {
             var ucwaMyGroupMembershipsRootUri = GetMyGroupMembershipsRootUri(createUcwaAppsResults, ucwaApplicationsHost);
 
-            httpClient.DefaultRequestHeaders.Clear();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            httpClient.DefaultRequestHeaders.Add("X-MS-RequiresMinResourceVersion", "2");
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Clear();
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Add("X-MS-RequiresMinResourceVersion", "2");
             var httpResponseMessage =
-                httpClient.PostAsync(ucwaMyGroupMembershipsRootUri + "?contactUri=sip:" + ucwaContactUri, null).Result;
+                Helpers.SharedHttpClient.PostAsync(ucwaMyGroupMembershipsRootUri + "?contactUri=sip:" + ucwaContactUri, null).Result;
 
             Console.WriteLine("AddMyGroupMemberships POST must pass X-MS-RequiresMinResourceVersion 2 in the request headers");
             Console.WriteLine("This is because it is a UCWA Revision / Version 2.0 request");
@@ -69,23 +69,23 @@ namespace UcwaSfboConsole.UcwaSfbo
 
         }
 
-        public static bool DeleteMyGroupMemberships(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult,
+        public static bool DeleteMyGroupMemberships(AuthenticationResult ucwaAuthenticationResult,
             String createUcwaAppsResults, String ucwaApplicationsHost, String ucwaContactUri)
         {
             var ucwaMyGroupMembershipsRootUri = GetMyGroupMembershipsRootUri(createUcwaAppsResults, ucwaApplicationsHost);
-            var ucwaMyGroupMembershipsResource = GetMyGroupMembershipsResource(httpClient,ucwaAuthenticationResult, ucwaMyGroupMembershipsRootUri);
+            var ucwaMyGroupMembershipsResource = GetMyGroupMembershipsResource(ucwaAuthenticationResult, ucwaMyGroupMembershipsRootUri);
 
             dynamic myGroupMembershipResultsObject = JObject.Parse(ucwaMyGroupMembershipsResource);
             var ucwaDeleteMyGroupMembershipsRootUri = ucwaApplicationsHost +
                   myGroupMembershipResultsObject._links.removeContactFromAllGroups.href;
             Console.WriteLine("ucwaDeleteMyGroupMembershipsRootUri is " + ucwaDeleteMyGroupMembershipsRootUri);
 
-            httpClient.DefaultRequestHeaders.Clear();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            httpClient.DefaultRequestHeaders.Add("X-MS-RequiresMinResourceVersion", "2");
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Clear();
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Add("X-MS-RequiresMinResourceVersion", "2");
             var httpResponseMessage =
-                httpClient.PostAsync(ucwaDeleteMyGroupMembershipsRootUri + "?contactUri=sip:" + ucwaContactUri, null).Result;
+                Helpers.SharedHttpClient.PostAsync(ucwaDeleteMyGroupMembershipsRootUri + "?contactUri=sip:" + ucwaContactUri, null).Result;
 
             Console.WriteLine("DeleteMyGroupMemberships POST must pass X-MS-RequiresMinResourceVersion 2 in the request headers");
             Console.WriteLine("This is because it is a UCWA Revision / Version 2.0 request");

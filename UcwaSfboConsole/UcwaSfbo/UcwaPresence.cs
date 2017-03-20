@@ -38,20 +38,20 @@ namespace UcwaSfboConsole.UcwaSfbo
             return getPresenceUri;
         }
 
-        public static void SetPresence(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult, String getPresenceUri,
+        public static void SetPresence(AuthenticationResult ucwaAuthenticationResult, String getPresenceUri,
             UcwaPresenceObject ucwaPresenceObject)
         {
             string setPresenceResults = string.Empty;
             Console.WriteLine("URI is " + getPresenceUri);
 
             //            var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Clear();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Clear();
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var setPresencePostData = JsonConvert.SerializeObject(ucwaPresenceObject);
             Console.WriteLine("SetPresence POST data is " + setPresencePostData);
             var httpResponseMessage =
-                httpClient.PostAsync(getPresenceUri, new StringContent(setPresencePostData, Encoding.UTF8,
+                Helpers.SharedHttpClient.PostAsync(getPresenceUri, new StringContent(setPresencePostData, Encoding.UTF8,
                 "application/json")).Result;
             Console.WriteLine("SetPresence response is " + httpResponseMessage.Content.ReadAsStringAsync().Result);
             Console.WriteLine("SetPresence response should be empty");

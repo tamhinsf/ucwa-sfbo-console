@@ -10,14 +10,14 @@ namespace UcwaSfboConsole.UcwaSfbo
     {
         private static string ucwaAutoDiscoveryUri = "https://webdir.online.lync.com/autodiscover/autodiscoverservice.svc/root";
 
-        public static string GetUcwaRootUri(HttpClient httpClient, AuthenticationContext authenticationContext, String sfboResourceAppId, 
+        public static string GetUcwaRootUri(AuthenticationContext authenticationContext, String sfboResourceAppId, 
                 string clientId, string redirectUri, UserCredential uc)
         {
             Console.WriteLine("Now we'll call UCWA Autodiscovery to get the root/oauth/user URI");
-            var ucwaAutoDiscoveryUserRootUri = DoUcwaAutoDiscovery(httpClient, authenticationContext, sfboResourceAppId, clientId, redirectUri, uc);
+            var ucwaAutoDiscoveryUserRootUri = DoUcwaAutoDiscovery(Helpers.SharedHttpClient, authenticationContext, sfboResourceAppId, clientId, redirectUri, uc);
 
             Console.WriteLine("Now we'll get the UCWA Applications URI for the user");
-            var ucwaRootUri = GetUcwaUserResourceUri(httpClient, authenticationContext, ucwaAutoDiscoveryUserRootUri, clientId, redirectUri, uc);
+            var ucwaRootUri = GetUcwaUserResourceUri(Helpers.SharedHttpClient, authenticationContext, ucwaAutoDiscoveryUserRootUri, clientId, redirectUri, uc);
 
             return ucwaRootUri;
         }

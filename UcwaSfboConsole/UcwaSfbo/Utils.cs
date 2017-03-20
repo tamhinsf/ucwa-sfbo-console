@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 
 namespace UcwaSfboConsole.UcwaSfbo
 {
@@ -11,5 +12,8 @@ namespace UcwaSfboConsole.UcwaSfbo
             return reduceUriToProtoAndHost;
         }
 
+        public static HttpClient SharedHttpClient = new HttpClient();
+
     }
+
 }

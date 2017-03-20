@@ -35,19 +35,19 @@ namespace UcwaSfboConsole.UcwaSfbo
             return getMakeMeAvailableUri;
         }
 
-        public static bool MakeMeAvailable(HttpClient httpClient, AuthenticationResult ucwaAuthenticationResult, String ucwaMakeMeAvailableRootUri,
+        public static bool MakeMeAvailable( AuthenticationResult ucwaAuthenticationResult, String ucwaMakeMeAvailableRootUri,
             UcwaMakeMeAvailableObject ucwaMyPresenceObject)
         {
             string makeMeAvailableResults = string.Empty;
             Console.WriteLine("URI is " + ucwaMakeMeAvailableRootUri);
 
-            httpClient.DefaultRequestHeaders.Clear();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Clear();
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ucwaAuthenticationResult.AccessToken);
+            Helpers.SharedHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var makeMeAvailablePostData = JsonConvert.SerializeObject(ucwaMyPresenceObject);
             Console.WriteLine("MakeMeAvailable POST data is " + makeMeAvailablePostData);
             var httpResponseMessage =
-                httpClient.PostAsync(ucwaMakeMeAvailableRootUri, new StringContent(makeMeAvailablePostData, Encoding.UTF8,
+                Helpers.SharedHttpClient.PostAsync(ucwaMakeMeAvailableRootUri, new StringContent(makeMeAvailablePostData, Encoding.UTF8,
                 "application/json")).Result;
             Console.WriteLine("MakeMeAvailable response is " + httpResponseMessage.Content.ReadAsStringAsync().Result);
             Console.WriteLine("MakeMeAvailable response should be empty");

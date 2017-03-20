@@ -14,16 +14,22 @@ namespace UcwaSfboConsole
 
         // replace tenant with the name of your Azure AD instance
         // this is usually in the form of your-tenant.onmicrosoft.com
+        // if you don't want to hard code this setting you can provide it as 
+        // the first command line argument
 
         private static string tenant = "";
 
         // replace clientID with the clientID of the SFBO native app you created
         // in your Azure AD instance.  
+        // if you don't want to hard code this setting you can provide it as 
+        // the second command line argument
 
-        // make sure you grant at least these three permissions to your app
-        // Create Skype Meetings
+        // make sure you grant these five permissions to your app
         // Initiate conversations and join meetings
+        // Create Skype Meetings
         // Read/write Skype user information (preview)
+        // Receive conversation invites (preview)
+        // Read/write Skype user contacts and groups
 
         private static string clientId = "";
 
@@ -38,6 +44,8 @@ namespace UcwaSfboConsole
         // using the dialog option.  If you're following the example in the README, you will have
         // used the value https://demo-sfbo-ucwa
 
+        // you can optionally override the value here as the third command line argument
+
         private static string redirectUri = "https://demo-sfbo-ucwa";
 
         // authenticationContext is initialized with the values of your
@@ -48,8 +56,8 @@ namespace UcwaSfboConsole
         private static AuthenticationContext authenticationContext = null;
 
         // feeling lazy?  hard code your username and password in the variables below 
-        // if values are present, the "login" command will automatically use them and not
-        // prompt you for credentials
+        // if values are present, the "login" -> "console" command option will automatically 
+        // use them and not prompt you for credentials
 
         private static string hardcodedUsername = "";
         private static string hardcodedPassword = "";
@@ -88,18 +96,34 @@ namespace UcwaSfboConsole
 
         private static AuthenticationResult ucwaAuthenticationResult = null;
 
+        // March 20 2017 Breaking Change - httpClient no longer needs to be passed to 
+        // the methods in UcwaSfbo. Instead, there is a new shared instance residing in 
+        // Utils.cs as Helpers.SharedHttpClient that they all now reference
+
         // Be resource efficient and declare and re-use single System.Net.Http.HttpClient 
         // for use across your entire app.  Otherwise you'll run out of resources over time
         // httpClient is thread and re-entrant safe
 
         // You will need to pass an httpClient to each UCWA network operation
 
-        private static HttpClient httpClient = new HttpClient();
+        // private static HttpClient httpClient = new HttpClient();
 
         #endregion
 
         static void Main(string[] args)
         {
+            if (args.Length >= 2)
+            {
+                tenant = args[0];
+                clientId = args[1];
+                
+                // optionally override redirectUri
+
+                if (args.Length == 3)
+                {
+                    redirectUri = args[2];
+                }
+            }
 
             string commandString = string.Empty;
             Console.ForegroundColor = ConsoleColor.White;
@@ -118,6 +142,13 @@ namespace UcwaSfboConsole
                 Console.WriteLine("You need to provide your Azure AD tenant name");
                 Console.WriteLine("and application clientId in Program.cs before");
                 Console.WriteLine("you can run this app");
+                Console.WriteLine("");
+                Console.WriteLine("Or you can provide the tenant name, clientID, and redirect URI");
+                Console.WriteLine("as command line parameters like this:");
+                Console.WriteLine("ucwa-sfbo-console mytenant.onmicrosoft.com my-alphanumeric-client-id https://redirect-uri");
+                Console.WriteLine("");
+                Console.WriteLine("Note: You don't need to provide the redirect URI (i.e. https://redirect-uri)");
+                Console.WriteLine("as a parameter if you've hard coded this value in Program.cs");
                 return;
             }
             else
@@ -287,7 +318,7 @@ namespace UcwaSfboConsole
                 Console.WriteLine("Check your tenant, clientID, and credentials");
                 return;
             }
-            ucwaApplicationsUri = UcwaAutodiscovery.GetUcwaRootUri(httpClient, authenticationContext, sfboResourceAppId, clientId, redirectUri, uc);
+            ucwaApplicationsUri = UcwaAutodiscovery.GetUcwaRootUri(authenticationContext, sfboResourceAppId, clientId, redirectUri, uc);
 
             Console.WriteLine("We'll store the base UCWA app URI for use with UCWA app calls");
             Console.WriteLine("We prefix this to the links returned from the UCWA apps POST");
@@ -310,7 +341,7 @@ namespace UcwaSfboConsole
             };
 
             Console.WriteLine("Making request to ucwaApplicationsUri " + ucwaApplicationsUri);
-            createUcwaAppsResults = UcwaApplications.CreateUcwaApps(httpClient, ucwaAuthenticationResult, ucwaApplicationsUri, ucwaMyAppsObject);
+            createUcwaAppsResults = UcwaApplications.CreateUcwaApps(ucwaAuthenticationResult, ucwaApplicationsUri, ucwaMyAppsObject);
 
             return;
         }
@@ -324,7 +355,7 @@ namespace UcwaSfboConsole
             }
 
             Console.WriteLine("Now we'll list all of your contacts and which group(s) they are in");
-            UcwaMyGroupMemberships.ListMyGroupMemberships(httpClient, ucwaAuthenticationResult, createUcwaAppsResults, ucwaApplicationsHost);
+            UcwaMyGroupMemberships.ListMyGroupMemberships(ucwaAuthenticationResult, createUcwaAppsResults, ucwaApplicationsHost);
 
             Console.WriteLine("Now enter the address of a contact to add: i.e. user@" + tenant);
             Console.WriteLine("Hit enter if you don't want to add a contact");
@@ -332,7 +363,7 @@ namespace UcwaSfboConsole
             var ucwaAddContactUri = Console.ReadLine().ToLower();
             if (ucwaAddContactUri != "")
             {
-                UcwaMyGroupMemberships.AddMyGroupMemberships(httpClient,ucwaAuthenticationResult, createUcwaAppsResults, ucwaApplicationsHost, ucwaAddContactUri);
+                UcwaMyGroupMemberships.AddMyGroupMemberships(ucwaAuthenticationResult, createUcwaAppsResults, ucwaApplicationsHost, ucwaAddContactUri);
             }
             else
             {
@@ -346,7 +377,7 @@ namespace UcwaSfboConsole
             var ucwaDeleteContactUri = Console.ReadLine().ToLower();
             if (ucwaDeleteContactUri != "")
             {
-                UcwaMyGroupMemberships.DeleteMyGroupMemberships(httpClient,ucwaAuthenticationResult, createUcwaAppsResults, ucwaApplicationsHost, ucwaDeleteContactUri);
+                UcwaMyGroupMemberships.DeleteMyGroupMemberships(ucwaAuthenticationResult, createUcwaAppsResults, ucwaApplicationsHost, ucwaDeleteContactUri);
             }
             else
             {
@@ -384,17 +415,17 @@ namespace UcwaSfboConsole
             };
 
             Console.WriteLine("Now we'll create an online meeting");
-            var ucwaMyCreatedOnlineMeetingUri = UcwaMyOnlineMeetings.CreateMyOnlineMeeting(httpClient,ucwaAuthenticationResult, ucwaMyOnlineMeetingsUserRootUri,
+            var ucwaMyCreatedOnlineMeetingUri = UcwaMyOnlineMeetings.CreateMyOnlineMeeting(ucwaAuthenticationResult, ucwaMyOnlineMeetingsUserRootUri,
                 ucwaApplicationsHost, ucwaMyOnlineMeetingObject);
 
             Console.WriteLine("Now we'll list all meetings");
-            UcwaMyOnlineMeetings.ListMyOnlineMeetings(httpClient,ucwaAuthenticationResult, ucwaMyOnlineMeetingsUserRootUri);
+            UcwaMyOnlineMeetings.ListMyOnlineMeetings(ucwaAuthenticationResult, ucwaMyOnlineMeetingsUserRootUri);
 
             Console.WriteLine("Now we'll delete the meeting we created " + ucwaMyCreatedOnlineMeetingUri);
-            UcwaMyOnlineMeetings.DeleteMyOnlineMeeting(httpClient,ucwaAuthenticationResult, ucwaMyCreatedOnlineMeetingUri);
+            UcwaMyOnlineMeetings.DeleteMyOnlineMeeting(ucwaAuthenticationResult, ucwaMyCreatedOnlineMeetingUri);
 
             Console.WriteLine("Now we'll list all meetings again");
-            UcwaMyOnlineMeetings.ListMyOnlineMeetings(httpClient,ucwaAuthenticationResult, ucwaMyOnlineMeetingsUserRootUri);
+            UcwaMyOnlineMeetings.ListMyOnlineMeetings(ucwaAuthenticationResult, ucwaMyOnlineMeetingsUserRootUri);
 
             Console.WriteLine("Is this meeting there in the JSON response above? " + ucwaMyCreatedOnlineMeetingUri);
 
@@ -445,7 +476,7 @@ namespace UcwaSfboConsole
             if (ucwaMakeMeAvailableRootUri != String.Empty)
             {
 
-                if (UcwaMakeMeAvailable.MakeMeAvailable(httpClient, ucwaAuthenticationResult, ucwaMakeMeAvailableRootUri, ucwaMakeMeAvailableObject))
+                if (UcwaMakeMeAvailable.MakeMeAvailable(ucwaAuthenticationResult, ucwaMakeMeAvailableRootUri, ucwaMakeMeAvailableObject))
                 {
                     return;
                 }
@@ -469,7 +500,7 @@ namespace UcwaSfboConsole
             {
                 availability = ucwaMakeMeAvailableObject.signInAs 
             };
-            UcwaPresence.SetPresence(httpClient, ucwaAuthenticationResult, ucwaPresenceRootUri, ucwaPresenceObject);
+            UcwaPresence.SetPresence(ucwaAuthenticationResult, ucwaPresenceRootUri, ucwaPresenceObject);
             
 
             #endregion
