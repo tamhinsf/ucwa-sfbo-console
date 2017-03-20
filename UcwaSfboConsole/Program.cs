@@ -156,8 +156,17 @@ namespace UcwaSfboConsole
             }
             else
             {
+                Console.WriteLine("");
+                Console.WriteLine("**************************************************");
+                Console.WriteLine("Your tenant admin consent URL is https://login.microsoftonline.com/common/oauth2/authorize?response_type=id_token" + 
+                    "&client_id=" + clientId + "&redirect_uri=" + redirectUri + "&response_mode=form_post&resource=https://webdir.online.lync.com" + 
+                    "&prompt=admin_consent");
+                Console.WriteLine("**************************************************");
+                Console.WriteLine("");
                 authenticationContext = new AuthenticationContext
                     (String.Format(CultureInfo.InvariantCulture, aadInstance, tenant));
+
+
             }
 
             Help();
