@@ -12,9 +12,15 @@ Skype for Business Online works with Azure Active Directory to perform user auth
 
 An instance of System.Net.Http.HttpClient no longer needs to be passed to the methods in UcwaSfbo (i.e. UcwaApplications.CreateUcwaApps). Instead, there is a new shared instance (Helpers.SharedHttpClient) residing in Utils.cs as that they all now reference.  
 
-## UCWA Autodiscovery Demistified
+## UCWA for Skype for Business Online Demistified
 
-The input and result of Skype for Business Online UCWA and Azure AD backend calls will be displayed so you can understand the flow.  You'll be able to sign in, create an application, create/list/delete an online meeting, list all contacts, add and delete a contact, and make a user available with a specific presence value.
+Our sample application and code will demonstrate how you can perform the following operations using UCWA and Skype for Business Online.
+
+* Authentication and Autodiscovery: The inputs and results of Azure AD and Skype for Business Online UCWA backend calls will be displayed so you can understand the flow. 
+* Application Creation: We'll automatically create a SfB Online application on your behalf, which will serve as the jump point for making UCWA API calls related to Online Meetings, Contact Management, and Presence
+* Online Meetings: Create / List / Delete an online meeting
+* Contact Management: List all contacts, and add and delete a contact
+* Presence: Make a user available with a specific presence value.
 
 Future versions of this example may provide a related nuget package.  Watch us for updates!   In the meantime, use our example to begin migrating your Skype for Business On-Premise apps to Skype for Business Online.
 
