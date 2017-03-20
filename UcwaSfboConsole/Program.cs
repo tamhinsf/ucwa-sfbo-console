@@ -96,9 +96,9 @@ namespace UcwaSfboConsole
 
         private static AuthenticationResult ucwaAuthenticationResult = null;
 
-        // March 20 2017 Breaking Change - httpClient no longer needs to be passed to 
-        // the methods in UcwaSfbo. Instead, there is a new shared instance residing in 
-        // Utils.cs as Helpers.SharedHttpClient that they all now reference
+        // An instance of System.Net.Http.HttpClient no longer needs to be passed to the methods 
+        // in UcwaSfbo.Instead, there is a new shared instance residing in Utils.cs as 
+        // Helpers.SharedHttpClient that they all now reference.
 
         // Be resource efficient and declare and re-use single System.Net.Http.HttpClient 
         // for use across your entire app.  Otherwise you'll run out of resources over time
@@ -145,7 +145,7 @@ namespace UcwaSfboConsole
                 Console.WriteLine("");
                 Console.WriteLine("Or you can provide the tenant name, clientID, and redirect URI");
                 Console.WriteLine("as command line parameters like this:");
-                Console.WriteLine("ucwa-sfbo-console mytenant.onmicrosoft.com my-alphanumeric-client-id https://redirect-uri");
+                Console.WriteLine("UcwaSfboConsole mytenant.onmicrosoft.com my-alphanumeric-client-id https://redirect-uri");
                 Console.WriteLine("");
                 Console.WriteLine("Note: You don't need to provide the redirect URI (i.e. https://redirect-uri)");
                 Console.WriteLine("as a parameter if you've hard coded this value in Program.cs");
