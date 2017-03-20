@@ -68,9 +68,11 @@ Future versions of this example may provide a related nuget package.  Watch us f
   ![Tenant ID Example](https://raw.githubusercontent.com/OfficeDev/TrainingContent/master/O3653/O3653-8%20Deep%20Dive%20into%20the%20Office%20365%20Unified%20API/Images/Figure04.png)
    
    
-* Applications built using the UCWA API for Skype for Business Online require tenant consent.  Perform the steps here as an admin to enable users to sign in to the application we're creating:
-   
-   https://msdn.microsoft.com/en-us/skype/websdk/docs/developwebsdkappsforsfbonline#tenant-administrator-consent-flow
+* Applications built using the UCWA API for Skype for Business Online may require administrative consent before users can sign in - which fortunately, you'll only need to do once. If you have trouble signing in:
+  * Whenever you successfully launch UcwaSfboConsole, we'll show you the URL you can visit to provide admin consent.  Sign in as the admin for the O365 tenant you've configured UcwaSfboConsole to work with. 
+* Alternatively, you can perform the steps here as an admin to enable users to sign in:
+  * https://msdn.microsoft.com/en-us/skype/websdk/docs/developwebsdkappsforsfbonline#tenant-administrator-consent-flow
+* Note: if you've configured the re-direct URL to be the same value as we've shown you on this page (i.e. http://demo-sfbo-ucwa), you'll be sent to an invalid page after successfully signing in.  
   
 ## Build and Run UcwaSfboConsole
 
