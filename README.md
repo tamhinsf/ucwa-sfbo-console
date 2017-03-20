@@ -10,7 +10,7 @@ Skype for Business Online works with Azure Active Directory to perform user auth
 
 #### Breaking Change 3/20/2017
 
-An instance of System.Net.Http.HttpClient no longer needs to be passed to the methods in UcwaSfbo. Instead, there is a new shared instance residing in Utils.cs as Helpers.SharedHttpClient that they all now reference.  
+An instance of System.Net.Http.HttpClient no longer needs to be passed to the methods in UcwaSfbo (i.e. UcwaApplications.CreateUcwaApps). Instead, there is a new shared instance (Helpers.SharedHttpClient) residing in Utils.cs as that they all now reference.  
 
 ## UCWA Autodiscovery Demistified
 
