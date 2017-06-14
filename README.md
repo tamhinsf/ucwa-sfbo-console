@@ -40,34 +40,26 @@ Future versions of this example may provide a related nuget package.  Watch us f
 
 ## Create a SfBO Application in Azure Active Directory
 
-* Sign in to your Azure Management Portal at https://manage.windowsazure.com
-* Select Active Directory -> Applications.  Click Add at the bottom of the screen to "Add an application my organization is developing."
+* Sign in to your Azure Management Portal at https://portal.azure.com
+* Select Active Directory -> App registrations -> New application registration
     * Name: SfboUcwa (anything will work)
-    * Type: NATIVE CLIENT APPLICATION
+    * Application type: Native
     * Redirect URI: http://demo-sfbo-ucwa (anything will work)
 * Once Azure has created your app, copy your Client ID and give your application access to SfBO.  
-   * Click "configure" on your app's page
-   * Copy the Client ID
-   * Scroll to the bottom of the page: Permissions to other applications.  
-     * Click Add application.  
-     * From the pop-up window, select Skype for Business Online.  
-     * Click the check mark to close the pop-up.
-   * Skype for Business Online should now be below "Permissions to other applications".   Click the down arrow to the right of Delegated Permissions and check at least the following:
-     * Initiate conversations and join meetings
-     * Create Skype Meetings
-     * Read/write Skype user information (preview)
-     * Receive conversation invites (preview)
-     * Read/write Skype user contacts and groups
-   * Click Save at the bottom of the page
-* Copy your Tenant name, which is typically in the form of your-domain.onmicrosoft.com.  You can also use your Tenant ID in its place.  How do you find your Tenant ID?
-  * While still logged into manage.windowsazure.com, Select Active Directory -> Name of the directory where you created your app.
-  * Select Applications.  Click View Endpoints at the bottom of the page.
-  * Your Tenant ID is the alphanumeric value separated by dashes, immediate after the hostname.  Make sure you copy the entire value: it's between the "/" characters.
- 
- 
-  ![Tenant ID Example](https://raw.githubusercontent.com/OfficeDev/TrainingContent/master/O3653/O3653-8%20Deep%20Dive%20into%20the%20Office%20365%20Unified%20API/Images/Figure04.png)
-   
-   
+   * Click your app's name (i.e. SfboUcwa) from the list of applications
+   * Copy the Application ID (Client ID)
+   * Click All settings -> Required Permissions
+     * Click Add 
+     * Select an API -> Skype for Business Online (Microsoft.Lync) -> Select
+     * Select permissions -> Select all Delegated Permissions
+       * Initiate conversations and join meetings
+       * Create Skype Meetings
+       * Read/write Skype user information (preview)
+       * Receive conversation invites (preview)
+       * Read/write Skype user contacts and groups
+   * Click Select
+   * Click Done
+* Take note of your tenant name, which is typically in the form of your-domain.onmicrosoft.com. You'll need to supply this when building or running the app.   
 * Applications built using the UCWA API for Skype for Business Online may require administrative consent before users can sign in - which fortunately, you'll only need to do once. If you have trouble signing in:
   * Whenever you successfully launch UcwaSfboConsole, we'll show you the URL you can visit to provide admin consent.  Sign in as the admin for the O365 tenant you've configured UcwaSfboConsole to work with. 
 * Alternatively, you can perform the steps here as an admin to enable users to sign in:
@@ -77,7 +69,7 @@ Future versions of this example may provide a related nuget package.  Watch us f
 ## Build and Run UcwaSfboConsole
 
 * Open the cloned code from this repository in Visual Studio
-* Update Program.cs in the UcwaSfboConsole folder with your Tenant name (tenant) and Client ID (clientId) 
+* Update Program.cs in the UcwaSfboConsole folder with your Tenant name (tenant) and Application Id / Client ID (clientId) 
   * Or, leave these values empty and provide them at the command line like so: 
     * UcwaSfboConsole mytenant.onmicrosoft.com my-alphanumeric-client-id
 * Optionally, you can hard code the username (i.e. username@your-domain.onmicrosoft.com) and password you want to use in the variables called hardcodedUsername and hardcodedPassword
